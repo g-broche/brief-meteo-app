@@ -13,7 +13,7 @@ import { ErrorScreen } from "../components/ErrorScreen";
 import styles from "../styles/Home.module.css";
 
 export const App = () => {
-  const [cityInput, setCityInput] = useState("Riga");
+  const [cityInput, setCityInput] = useState("Paris");
   const [triggerFetch, setTriggerFetch] = useState(true);
   const [weatherData, setWeatherData] = useState();
   const [unitSystem, setUnitSystem] = useState("metric");
@@ -23,7 +23,6 @@ export const App = () => {
       const res = await fetch("api/data", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cityInput }),
       });
       const data = await res.json();
       setWeatherData({ ...data });
