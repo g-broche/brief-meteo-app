@@ -8,22 +8,42 @@ import {
 export const getWindSpeed = (unitSystem, windInMps) =>
   unitSystem == "metric" ? windInMps : mpsToMph(windInMps);
 
+export const getCurrentVisibility = (weatherData) => {
+  let timeIndex = null;
+  const currentTime = weatherData.current.time;
+  //find the time index interval corresponding to the current time
+  for (let index = 0; index < weatherData.minutely_15.time.length - 1; index++) {
+    const thisIterationTime = weatherData.minutely_15.time[index];
+    const nextIterationTime = weatherData.minutely_15.time[index+1];
+    if(thisIterationTime <= currentTime && currentTime < nextIterationTime){
+      timeIndex = index;
+      break;
+    }
+  }
+  const visibility = weatherData.minutely_15.visibility[timeIndex];
+  return visibility;
+}
+
 export const getVisibility = (unitSystem, visibilityInMeters) =>
   unitSystem == "metric"
     ? (visibilityInMeters / 1000).toFixed(1)
     : kmToMiles(visibilityInMeters / 1000);
 
-export const getTime = (unitSystem, currentTime, timezone) =>
-  unitSystem == "metric"
-    ? unixToLocalTime(currentTime, timezone)
-    : timeTo12HourFormat(unixToLocalTime(currentTime, timezone));
+export const getTime = (unitSystem, currentTime, timezone) => {
+  const time = unitSystem == "metric" ? unixToLocalTime(currentTime, timezone) : timeTo12HourFormat(unixToLocalTime(currentTime, timezone));
+  return time;
+}
 
-export const getAMPM = (unitSystem, currentTime, timezone) =>
-  unitSystem === "imperial"
-    ? unixToLocalTime(currentTime, timezone).split(":")[0] >= 12
-      ? "PM"
-      : "AM"
-    : "";
+
+export const getAMPM = (unitSystem, currentTime, timezone) => {
+  if (unitSystem !== "imperial"){
+    return "";
+  }
+  const AMPMIndicator = unixToLocalTime(currentTime, timezone).split(":")[0] >= 12 ? "PM" : "AM";
+  return AMPMIndicator;
+
+}
+
 
 export const getWeekDay = (weatherData) => {
   const weekday = [
@@ -35,7 +55,7 @@ export const getWeekDay = (weatherData) => {
     "Friday",
     "Saturday",
   ];
-  return weekday[
-    new Date((weatherData.dt + weatherData.timezone) * 1000).getUTCDay()
-  ];
+  const date = new Date(weatherData.datetime);
+  const dayOfWeek = date.getDay();
+  return weekday[dayOfWeek];
 };

@@ -7,9 +7,9 @@ export const DateAndTime = ({ weatherData, unitSystem }) => {
       <h2>
         {`${getWeekDay(weatherData)}, ${getTime(
           unitSystem,
-          weatherData.dt,
-          weatherData.timezone
-        )} ${getAMPM(unitSystem, weatherData.dt, weatherData.timezone)}`}
+          weatherData.datetime,
+          weatherData.utc_offset_seconds*1000
+        )} ${getAMPM(unitSystem, weatherData.datetime, weatherData.utc_offset_seconds*1000)}`}
       </h2>
     </div>
   );

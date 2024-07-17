@@ -6,14 +6,15 @@ export default async function handler(req, res) {
   const config = await getConfig();
   const {cityLatitude, cityLongitude, cityName, countryName} = config;
 
-  const options ="&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code"
+  const options ="&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m&minutely_15=visibility&daily=sunrise,sunset&timezone=auto"
 
   const requestUrl = `${apiOrigin}${apiEndpoint}?latitude=${cityLatitude}&longitude=${cityLongitude}${options}`
+
   const getWeatherData = await fetch(requestUrl);
   const data = await getWeatherData.json();
   
   data.city = cityName;
   data.country = countryName;
-  console.log(data)
+  data.datetime = Date.now();
   res.status(200).json(data);
 }

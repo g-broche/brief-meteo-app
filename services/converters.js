@@ -32,28 +32,20 @@ export const degToCompass = (num) => {
   return arr[val % 16];
 };
 
-export const unixToLocalTime = (unixSeconds, timezone) => {
-  let time = new Date((unixSeconds + timezone) * 1000)
+export const unixToLocalTime = (unix, timezone) => {
+  let time = new Date((unix + timezone))
     .toISOString()
     .match(/(\d{2}:\d{2})/)[0];
 
   return time.startsWith("0") ? time.substring(1) : time;
 };
 
+export const timeStringToUnix = (timeString) => {
+  let time = new Date(timeString);
+  return time.getTime();
+}
+
 export const weatherCodeToInterpretation = (weatherCode) => {
-  // 0 	Clear sky
-  // 1, 2, 3 	Mainly clear, partly cloudy, and overcast
-  // 45, 48 	Fog and depositing rime fog
-  // 51, 53, 55 	Drizzle: Light, moderate, and dense intensity
-  // 56, 57 	Freezing Drizzle: Light and dense intensity
-  // 61, 63, 65 	Rain: Slight, moderate and heavy intensity
-  // 66, 67 	Freezing Rain: Light and heavy intensity
-  // 71, 73, 75 	Snow fall: Slight, moderate, and heavy intensity
-  // 77 	Snow grains
-  // 80, 81, 82 	Rain showers: Slight, moderate, and violent
-  // 85, 86 	Snow showers slight and heavy
-  // 95 * 	Thunderstorm: Slight or moderate
-  // 96, 99 * 	Thunderstorm with slight and heavy hail
   const conversionTable = {
     0 :	"Clear sky",
     1 : "Mainly clear",
