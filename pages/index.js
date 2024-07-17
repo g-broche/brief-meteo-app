@@ -10,10 +10,12 @@ import { UnitSwitch } from "../components/UnitSwitch";
 import { LoadingScreen } from "../components/LoadingScreen";
 import { ErrorScreen } from "../components/ErrorScreen";
 
+import { weatherCodeToInterpretation, weatherCodeToIcon } from "../services/converters";
+
 import styles from "../styles/Home.module.css";
 
 export const App = () => {
-  const [cityInput, setCityInput] = useState("Paris");
+  // const [cityInput, setCityInput] = useState("Paris");
   const [triggerFetch, setTriggerFetch] = useState(true);
   const [weatherData, setWeatherData] = useState();
   const [unitSystem, setUnitSystem] = useState("metric");
@@ -39,17 +41,17 @@ export const App = () => {
   return weatherData && !weatherData.message ? (
     <div className={styles.wrapper}>
       <MainCard
-        city={weatherData.name}
-        country={weatherData.sys.country}
-        description={weatherData.weather[0].description}
-        iconName={weatherData.weather[0].icon}
+        city={weatherData.city}
+        country={weatherData.country}
+        description={weatherCodeToInterpretation(weatherData.weather_code)}
+        iconName={weatherCodeToIcon(weatherData.weather_code)}
         unitSystem={unitSystem}
         weatherData={weatherData}
       />
       <ContentBox>
         <Header>
           <DateAndTime weatherData={weatherData} unitSystem={unitSystem} />
-          <Search
+          {/* <Search
             placeHolder="Search a city..."
             value={cityInput}
             onFocus={(e) => {
@@ -61,7 +63,7 @@ export const App = () => {
               e.keyCode === 13 && setTriggerFetch(!triggerFetch);
               e.target.placeholder = "Search a city...";
             }}
-          />
+          /> */}
         </Header>
         <MetricsBox weatherData={weatherData} unitSystem={unitSystem} />
         <UnitSwitch onClick={changeSystem} unitSystem={unitSystem} />
