@@ -12,15 +12,15 @@ export const getCurrentVisibility = (weatherData) => {
   let timeIndex = null;
   const currentTime = weatherData.current.time;
   //find the time index interval corresponding to the current time
-  for (let index = 0; index < weatherData.minutely_15.time.length - 1; index++) {
-    const thisIterationTime = weatherData.minutely_15.time[index];
-    const nextIterationTime = weatherData.minutely_15.time[index+1];
+  for (let index = 0; index < weatherData.hourly.time.length - 1; index++) {
+    const thisIterationTime = weatherData.hourly.time[index];
+    const nextIterationTime = weatherData.hourly.time[index+1];
     if(thisIterationTime <= currentTime && currentTime < nextIterationTime){
       timeIndex = index;
       break;
     }
   }
-  const visibility = weatherData.minutely_15.visibility[timeIndex];
+  const visibility = weatherData.hourly.visibility[timeIndex];
   return visibility;
 }
 
