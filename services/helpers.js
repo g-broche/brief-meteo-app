@@ -45,7 +45,7 @@ export const getAMPM = (unitSystem, currentTime, timezone) => {
 }
 
 
-export const getWeekDay = (weatherData) => {
+export const getWeekDay = (unixTime) => {
   const weekday = [
     "Sunday",
     "Monday",
@@ -55,7 +55,7 @@ export const getWeekDay = (weatherData) => {
     "Friday",
     "Saturday",
   ];
-  const date = new Date(weatherData.datetime);
+  const date = new Date(unixTime);
   const dayOfWeek = date.getDay();
   return weekday[dayOfWeek];
 };

@@ -15,10 +15,26 @@ import { weatherCodeToInterpretation, weatherCodeToIcon } from "../services/conv
 import styles from "../styles/Home.module.css";
 
 export const App = () => {
-  // const [cityInput, setCityInput] = useState("Paris");
   const [triggerFetch, setTriggerFetch] = useState(true);
   const [weatherData, setWeatherData] = useState();
+  const [time, setTime] = useState();
   const [unitSystem, setUnitSystem] = useState("metric");
+
+  useEffect(() =>{
+    const interval = setInterval(() => {
+      const currentTime = new Date();
+      setTime(currentTime);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [])
+
+  useEffect(() =>{
+    if(time){
+      console.log(time.getTime());
+    }
+    
+  }, [time])
 
   useEffect(() => {
     const getData = async () => {
@@ -37,7 +53,7 @@ export const App = () => {
       ? setUnitSystem("imperial")
       : setUnitSystem("metric");
 
-  return weatherData && !weatherData.message ? (
+  return time && weatherData && !weatherData.message ? (
     <div className={styles.wrapper}>
       <MainCard
         city={weatherData.city}
@@ -49,7 +65,7 @@ export const App = () => {
       />
       <ContentBox>
         <Header>
-          <DateAndTime weatherData={weatherData} unitSystem={unitSystem} />
+          <DateAndTime unixTime={time.getTime()} weatherData={weatherData} unitSystem={unitSystem} />
         </Header>
         <MetricsBox weatherData={weatherData} unitSystem={unitSystem} />
         <UnitSwitch onClick={changeSystem} unitSystem={unitSystem} />
