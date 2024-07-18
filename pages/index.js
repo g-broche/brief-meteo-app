@@ -43,7 +43,7 @@ export const App = () => {
       setTriggerFetch(!triggerFetch);
     }
     setPreviousTime(time);
-  }, [time])
+  }, [time, previousTime, triggerFetch])
 
   //fetching from api on trigger change
   useEffect(() => {
@@ -71,9 +71,7 @@ export const App = () => {
 
   //countdown to fetch retry
   useEffect(() => {
-    console.log(countdownToNewAttempt);
     if(countdownToNewAttempt === null){
-      console.log("null case");
       return;
     }
     if(countdownToNewAttempt === 0){
@@ -85,7 +83,7 @@ export const App = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [countdownToNewAttempt])
+  }, [countdownToNewAttempt, triggerFetch])
 
   const changeSystem = () =>
     unitSystem == "metric"
