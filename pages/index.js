@@ -17,6 +17,7 @@ import styles from "../styles/Home.module.css";
 export const App = () => {
   const [triggerFetch, setTriggerFetch] = useState(true);
   const [weatherData, setWeatherData] = useState();
+  const [previousTime, setPreviousTime] = useState();
   const [time, setTime] = useState();
   const [unitSystem, setUnitSystem] = useState("metric");
 
@@ -30,10 +31,13 @@ export const App = () => {
   }, [])
 
   useEffect(() =>{
-    if(time){
-      console.log(time.getTime());
+    if(!time && !previousTime){
+      return
     }
-    
+    if(time && previousTime && (time.getHours() !== previousTime.getHours())){
+      setTriggerFetch(!triggerFetch);
+    }
+    setPreviousTime(time)
   }, [time])
 
   useEffect(() => {
