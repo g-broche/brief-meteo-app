@@ -18,3 +18,7 @@ The city/location and country names must also be entered by the user in the conf
 
 To enter these informations, use the api-config.json file.
 To find coordinates you can use the API website of [Open Meteo](https://open-meteo.com/en/docs) and the search box to enter a location to get the corresponding coordinates.
+
+## Issue with Node.js version and openssl due to legacy algorithm
+
+In case of issue running the app due to error 'ERR_OSSL_EVP_UNSUPPORTED', use ' $env:NODE_OPTIONS="--openssl-legacy-provider" ' in your terminal before running the app.
