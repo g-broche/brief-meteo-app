@@ -63,7 +63,7 @@ export const App = () => {
         city={weatherData.city}
         country={weatherData.country}
         description={weatherCodeToInterpretation(weatherData.current.weather_code)}
-        iconName={weatherCodeToIcon(weatherData.current.weather_code)}
+        iconName={weatherCodeToIcon(weatherData.current.weather_code, weatherData.current.is_day)}
         unitSystem={unitSystem}
         weatherData={weatherData}
       />
