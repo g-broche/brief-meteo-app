@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   const config = await getConfig();
   const {cityLatitude, cityLongitude, cityName, countryName} = config;
 
-  const options ="&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m&hourly=visibility&daily=sunrise,sunset&timezone=auto"
+  const options ="&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m&hourly=visibility&daily=sunrise,sunset&wind_speed_unit=ms&timezone=auto"
 
   const requestUrl = `${apiOrigin}${apiEndpoint}?latitude=${cityLatitude}&longitude=${cityLongitude}${options}`
 
