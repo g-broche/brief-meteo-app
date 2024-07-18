@@ -20,7 +20,12 @@ export const App = () => {
   const [previousTime, setPreviousTime] = useState();
   const [time, setTime] = useState();
   const [unitSystem, setUnitSystem] = useState("metric");
+  const [mustAttemptNewFetch, setMustAttemptNewFetch] = useState(false);
+  const [countdownToNewAttempt, setCountdownToNewAttempt] = useState(null);
 
+  const fetchRetryDelay = 30;
+
+  //clock used to display the time
   useEffect(() =>{
     const interval = setInterval(() => {
       const currentTime = new Date();
@@ -30,6 +35,7 @@ export const App = () => {
     return () => clearInterval(interval);
   }, [])
 
+  //compares time to the time of the previous clock tick and trigger fetch on hour change
   useEffect(() =>{
     if(!time && !previousTime){
       return
@@ -37,27 +43,59 @@ export const App = () => {
     if(time && previousTime && (time.getHours() !== previousTime.getHours())){
       setTriggerFetch(!triggerFetch);
     }
-    setPreviousTime(time)
+    setPreviousTime(time);
   }, [time])
 
+  //fetching from api on trigger change
   useEffect(() => {
+    setMustAttemptNewFetch(false);
     const getData = async () => {
       const res = await fetch("api/data", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
+      const isfetchSuccess = data.error? false : true;
+      setMustAttemptNewFetch(!isfetchSuccess);
       setWeatherData({ ...data });
     };
     getData();
   }, [triggerFetch]);
+
+  //attempts new fetch
+  useEffect(() => {
+    if(!mustAttemptNewFetch){
+      return;
+    }
+    setCountdownToNewAttempt(fetchRetryDelay);
+  }, [mustAttemptNewFetch])
+
+  //countdown to fetch retry
+  useEffect(() => {
+    console.log(countdownToNewAttempt);
+    if(countdownToNewAttempt === null){
+      console.log("null case");
+      return;
+    }
+    if(countdownToNewAttempt === 0){
+      console.log("fetch attempt");
+      // setTriggerFetch(!triggerFetch);
+      setCountdownToNewAttempt(null);
+      return;
+    }
+    const interval = setInterval(() => {
+      setCountdownToNewAttempt(countdownToNewAttempt-1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [countdownToNewAttempt])
 
   const changeSystem = () =>
     unitSystem == "metric"
       ? setUnitSystem("imperial")
       : setUnitSystem("metric");
 
-  return time && weatherData && !weatherData.message ? (
+  return time && weatherData && !weatherData.error ? (
     <div className={styles.wrapper}>
       <MainCard
         city={weatherData.city}
@@ -75,8 +113,8 @@ export const App = () => {
         <UnitSwitch onClick={changeSystem} unitSystem={unitSystem} />
       </ContentBox>
     </div>
-  ) : weatherData && weatherData.message ? (
-    <ErrorScreen errorMessage="City not found, try again!">
+  ) : weatherData && weatherData.error ? (
+    <ErrorScreen errorMessage="Error occured while getting weather informations">
       <Search
         onFocus={(e) => (e.target.value = "")}
         onChange={(e) => setCityInput(e.target.value)}

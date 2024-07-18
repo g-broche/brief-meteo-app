@@ -8,7 +8,8 @@ export default async function handler(req, res) {
 
   const options ="&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m&hourly=visibility&daily=sunrise,sunset&wind_speed_unit=ms&timezone=auto"
 
-  const requestUrl = `${apiOrigin}${apiEndpoint}?latitude=${cityLatitude}&longitude=${cityLongitude}${options}`
+  // const requestUrl = `${apiOrigin}${apiEndpoint}?latitude=${cityLatitude}&longitude=${cityLongitude}${options}`
+  const requestUrl = `${apiOrigin}${apiEndpoint}?longitude=${cityLongitude}${options}`
 
   const getWeatherData = await fetch(requestUrl);
   const data = await getWeatherData.json();
