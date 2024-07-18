@@ -4,7 +4,6 @@ import { MainCard } from "../components/MainCard";
 import { ContentBox } from "../components/ContentBox";
 import { Header } from "../components/Header";
 import { DateAndTime } from "../components/DateAndTime";
-import { Search } from "../components/Search";
 import { MetricsBox } from "../components/MetricsBox";
 import { UnitSwitch } from "../components/UnitSwitch";
 import { LoadingScreen } from "../components/LoadingScreen";
@@ -78,9 +77,7 @@ export const App = () => {
       return;
     }
     if(countdownToNewAttempt === 0){
-      console.log("fetch attempt");
-      // setTriggerFetch(!triggerFetch);
-      setCountdownToNewAttempt(null);
+      setTriggerFetch(!triggerFetch);
       return;
     }
     const interval = setInterval(() => {
@@ -114,12 +111,7 @@ export const App = () => {
       </ContentBox>
     </div>
   ) : weatherData && weatherData.error ? (
-    <ErrorScreen errorMessage="Error occured while getting weather informations">
-      <Search
-        onFocus={(e) => (e.target.value = "")}
-        onChange={(e) => setCityInput(e.target.value)}
-        onKeyDown={(e) => e.keyCode === 13 && setTriggerFetch(!triggerFetch)}
-      />
+    <ErrorScreen errorMessage="Error occured while getting weather informations" retryTimer={countdownToNewAttempt}>
     </ErrorScreen>
   ) : (
     <LoadingScreen loadingMessage="Loading data..." />
