@@ -7,8 +7,10 @@ export const mpsToKmph = (mps) => (mps * 3.6).toFixed(2);
 export const kmToMiles = (km) => (km / 1.609).toFixed(1);
 
 export const timeTo12HourFormat = (time) => {
-  let [hours, minutes] = time.split(":");
-  return `${(hours %= 12) ? hours : 12}:${minutes}`;
+  let [hours, minutes, seconds] = time.split(":");
+  return seconds
+    ? `${(hours %= 12) ? hours : 12}:${minutes}:${seconds}`
+    : `${(hours %= 12) ? hours : 12}:${minutes}`;
 };
 
 export const degToCompass = (num) => {
@@ -34,11 +36,11 @@ export const degToCompass = (num) => {
   return arr[val % 16];
 };
 
-export const unixToLocalTime = (unix, timezone) => {
+export const unixToLocalTime = (unix, timezone, requireSeconds = true) => {
+  let timeFormatPattern = requireSeconds? /(\d{2}:\d{2}:\d{2})/ : /(\d{2}:\d{2})/
   let time = new Date((unix + timezone))
     .toISOString()
-    .match(/(\d{2}:\d{2})/)[0];
-
+    .match(timeFormatPattern)[0];
   return time.startsWith("0") ? time.substring(1) : time;
 };
 

@@ -30,8 +30,8 @@ export const getVisibility = (unitSystem, visibilityInMeters) =>
     ? (visibilityInMeters / 1000).toFixed(1)
     : kmToMiles(visibilityInMeters / 1000);
 
-export const getTime = (unitSystem, currentTime, timezone) => {
-  const time = unitSystem == "metric" ? unixToLocalTime(currentTime, timezone) : timeTo12HourFormat(unixToLocalTime(currentTime, timezone));
+export const getTime = (unitSystem, currentTime, timezone, requireSeconds = true) => {
+  const time = unitSystem == "metric" ? unixToLocalTime(currentTime, timezone, requireSeconds) : timeTo12HourFormat(unixToLocalTime(currentTime, timezone, requireSeconds));
   return time;
 }
 

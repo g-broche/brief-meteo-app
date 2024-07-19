@@ -41,7 +41,8 @@ export const MetricsBox = ({ weatherData, unitSystem }) => {
         metric={getTime(
           unitSystem,
           timeStringToUnix(weatherData.daily.sunrise[0]),
-          weatherData.utc_offset_seconds*1000
+          weatherData.utc_offset_seconds*1000,
+          false
         )}
         unit={getAMPM(
           unitSystem,
@@ -55,7 +56,8 @@ export const MetricsBox = ({ weatherData, unitSystem }) => {
         metric={getTime(
           unitSystem,
           timeStringToUnix(weatherData.daily.sunset[0]),
-          weatherData.utc_offset_seconds*1000
+          weatherData.utc_offset_seconds*1000,
+          false
         )}
         unit={getAMPM(unitSystem, timeStringToUnix(weatherData.daily.sunset[0]), weatherData.utc_offset_seconds*1000)}
       />
